@@ -47,8 +47,11 @@ const images = [
 ];
 
 const gallery = document.querySelector(".gallery");
+const modal = document.getElementById("modal");
+const modalImg = document.getElementById("modal-image");
 
-const markup = images
+// Генерація розмітки
+gallery.innerHTML = images
   .map(
     (image) => `
   <li>
@@ -62,11 +65,23 @@ const markup = images
   )
   .join("");
 
-gallery.innerHTML = markup;
-
-// Делегування події click
+// Делегування кліку
 gallery.addEventListener("click", (event) => {
   if (event.target.nodeName !== "IMG") return;
+
   const originalUrl = event.target.dataset.original;
-  console.log("Велике зображення:", originalUrl);
+  const altText = event.target.alt;
+
+  console.log("Велике зображення:", originalUrl); // 👈 завдання №10 виконано
+
+  modalImg.src = originalUrl;
+  modalImg.alt = altText;
+  modal.classList.remove("hidden");
+});
+
+// Закриття по кліку
+modal.addEventListener("click", () => {
+  modal.classList.add("hidden");
+  modalImg.src = "";
+  modalImg.alt = "";
 });
