@@ -47,10 +47,7 @@ const images = [
 ];
 
 const gallery = document.querySelector(".gallery");
-const modal = document.getElementById("modal");
-const modalImg = document.getElementById("modal-image");
 
-// Генерація розмітки
 gallery.innerHTML = images
   .map(
     (image) => `
@@ -65,23 +62,17 @@ gallery.innerHTML = images
   )
   .join("");
 
-// Делегування кліку
 gallery.addEventListener("click", (event) => {
   if (event.target.nodeName !== "IMG") return;
 
   const originalUrl = event.target.dataset.original;
   const altText = event.target.alt;
 
-  console.log("Велике зображення:", originalUrl); // 👈 завдання №10 виконано
+  console.log("Велике зображення:", originalUrl);
 
-  modalImg.src = originalUrl;
-  modalImg.alt = altText;
-  modal.classList.remove("hidden");
-});
+  const instance = basicLightbox.create(`
+    <img src="${originalUrl}" alt="${altText}" />
+  `);
 
-// Закриття по кліку
-modal.addEventListener("click", () => {
-  modal.classList.add("hidden");
-  modalImg.src = "";
-  modalImg.alt = "";
+  instance.show();
 });
