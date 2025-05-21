@@ -48,31 +48,52 @@ const images = [
 
 const gallery = document.querySelector(".gallery");
 
-gallery.innerHTML = images
-  .map(
-    (image) => `
+gallery.innerHTML = images.map((image, index) => `
   <li>
     <img
       src="${image.preview}"
+      data-index="${index}"
       data-original="${image.original}"
       alt="${image.description}"
     />
   </li>
-`
-  )
-  .join("");
+`).join("");
+
+let currentIndex = 0;
+let instance = null;
 
 gallery.addEventListener("click", (event) => {
   if (event.target.nodeName !== "IMG") return;
-
-  const originalUrl = event.target.dataset.original;
-  const altText = event.target.alt;
-
-  console.log("Велике зображення:", originalUrl);
-
-  const instance = basicLightbox.create(`
-    <img src="${originalUrl}" alt="${altText}" />
-  `);
-
-  instance.show();
+  currentIndex = parseInt(event.target.dataset.index, 10);
+  showImage(currentIndex);
 });
+
+function showImage(index) {
+  const { original, description } = images[index];
+  instance = basicLightbox.create(`
+    <img src="${original}" alt="${description}" />
+  `, {
+    onShow: () => document.addEventListener('keydown', onKeydown),
+    onClose: () => document.removeEventListener('keydown', onKeydown)
+  });
+  instance.show();
+}
+
+function onKeydown(event) {
+  if (event.key === "ArrowRight") {
+    currentIndex = (currentIndex + 1) % images.length;
+    updateImage();
+  } else if (event.key === "ArrowLeft") {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    updateImage();
+  } else if (event.key === "Escape") {
+    instance.close();
+  }
+}
+
+function updateImage() {
+  const { original, description } = images[currentIndex];
+  const img = instance.element().querySelector("img");
+  img.src = original;
+  img.alt = description;
+}
