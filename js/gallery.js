@@ -49,13 +49,16 @@ const images = [
 const gallery = document.querySelector(".gallery");
 
 gallery.innerHTML = images.map((image, index) => `
-  <li>
-    <img
-      src="${image.preview}"
-      data-index="${index}"
-      data-original="${image.original}"
-      alt="${image.description}"
-    />
+  <li class="col-12 col-sm-6 col-md-4 col-lg-3">
+    <div class="card shadow-sm h-100">
+      <img
+        src="${image.preview}"
+        class="card-img-top"
+        data-index="${index}"
+        data-original="${image.original}"
+        alt="${image.description}"
+      />
+    </div>
   </li>
 `).join("");
 

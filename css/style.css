@@ -167,3 +167,13 @@ main {
 .right-btn {
   right: 10px;
 }
+
+.card-img-top {
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.card-img-top:hover {
+  transform: scale(1.03);
+}
