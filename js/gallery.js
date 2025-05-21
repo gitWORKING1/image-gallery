@@ -71,9 +71,27 @@ gallery.addEventListener("click", (event) => {
 function showImage(index) {
   const { original, description } = images[index];
   instance = basicLightbox.create(`
-    <img src="${original}" alt="${description}" />
+    <div class="modal-wrapper">
+      <button class="nav-btn left-btn" aria-label="Попереднє зображення">&#10094;</button>
+      <img src="${original}" alt="${description}" />
+      <button class="nav-btn right-btn" aria-label="Наступне зображення">&#10095;</button>
+    </div>
   `, {
-    onShow: () => document.addEventListener('keydown', onKeydown),
+    onShow: () => {
+      document.addEventListener('keydown', onKeydown);
+      instance.element().querySelector('.left-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  updateImage();
+});
+
+instance.element().querySelector('.right-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  currentIndex = (currentIndex + 1) % images.length;
+  updateImage();
+});
+
+    },
     onClose: () => document.removeEventListener('keydown', onKeydown)
   });
   instance.show();
